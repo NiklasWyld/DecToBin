@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dezimal zu Binär</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f0f0;
+    }
+    h1 {
+      font-size: 1.5rem;
+    }
+    .display-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .display-box {
+      font-size: 1.5rem;
+      background: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      width: 220px;
+      text-align: center;
+    }
+    .label {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    #keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 200px;
+    }
+    .btn {
+      padding: 1rem;
+      font-size: 1.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+    .btn:active {
+      background: #0056b3;
+    }
+    #controls {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    #invertToggle {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #invertToggle.off {
+      background: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dezimal zu Binär</h1>
+
+  <div class="display-container">
+    <div class="label">🔢 Dezimal:</div>
+    <div id="decimalOutput" class="display-box"></div>
+    <div class="label">💡 Binär:</div>
+    <div id="output" class="display-box">00000000</div>
+  </div>
+
+  <div id="keypad">
+    <button class="btn">1</button>
+    <button class="btn">2</button>
+    <button class="btn">3</button>
+    <button class="btn">4</button>
+    <button class="btn">5</button>
+    <button class="btn">6</button>
+    <button class="btn">7</button>
+    <button class="btn">8</button>
+    <button class="btn">9</button>
+    <button class="btn">0</button>
+    <button class="btn" id="clear">C</button>
+    <button class="btn" id="del">←</button>
+  </div>
+
+  <div id="controls">
+    <button id="invertToggle" class="on">Invertiert: AN</button>
+  </div>
+
+  <script>
+    let input = '';
+    let inverted = true;
+    const output = document.getElementById('output');
+    const decimalOutput = document.getElementById('decimalOutput');
+    const buttons = document.querySelectorAll('.btn');
+    const invertToggle = document.getElementById('invertToggle');
+
+    function updateOutput() {
+      const decimal = parseInt(input || '0');
+      let bin = decimal.toString(2).padStart(8, '0');
+      if (inverted) bin = bin.split('').reverse().join('');
+      decimalOutput.textContent = decimal;
+      output.textContent = bin;
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.id === 'clear') {
+          input = '';
+        } else if (btn.id === 'del') {
+          input = input.slice(0, -1);
+        } else {
+          input += btn.textContent;
+        }
+        updateOutput();
+      });
+    });
+
+    invertToggle.addEventListener('click', () => {
+      inverted = !inverted;
+      invertToggle.textContent = `Invertiert: ${inverted ? 'AN' : 'AUS'}`;
+      invertToggle.className = inverted ? 'on' : 'off';
+      updateOutput();
+    });
+
+    updateOutput();
+  </script>
+</body>
+</html>
