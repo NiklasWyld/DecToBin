@@ -76,6 +76,10 @@
     #invertToggle.off {
       background: #dc3545;
     }
+    .creator-note {
+        margin-top: 20px;
+        color: lightgray;
+    }
   </style>
 </head>
 <body>
@@ -107,6 +111,10 @@
     <button id="invertToggle" class="on">Invertiert: AN</button>
   </div>
 
+  <div class="creator-note">
+    Entwickelt von Niklas Wild
+  </div>
+
   <script>
     let input = '';
     let inverted = true;
@@ -116,7 +124,11 @@
     const invertToggle = document.getElementById('invertToggle');
 
     function updateOutput() {
-      const decimal = parseInt(input || '0');
+      let decimal = parseInt(input || '0');
+      if (decimal > 255) {
+        input = '255';
+        decimal = 255;
+      }
       let bin = decimal.toString(2).padStart(8, '0');
       if (inverted) bin = bin.split('').reverse().join('');
       decimalOutput.textContent = decimal;
